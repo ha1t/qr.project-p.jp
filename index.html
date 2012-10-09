@@ -1,44 +1,30 @@
-<?php
-/**
- *
- *
- */
-
-header('Content-Type: text/html; charset=UTF-8');
-
-$img_tag = '';
-if (isset($_POST['url'])) {
-    $url = urlencode($_POST['url']);
-    $img_tag = '<img src="http://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=' . $url . '" />';
-}
-?>
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>QRコード作成ツール</title>
-  <style type="text/css"> 
+  <style type="text/css">
   body {
     margin: 0px;
     background-color: black;
     color: white;
   }
- 
+
   h1 {
     padding: 1em;
     background-color: #feff3d;
     color: black;
   }
- 
+
   div.textBody {
     margin: 0.5em;
     padding: 0.5em;
     background-color: #666666;
   }
- 
+
   a {
     color: white;
   }
- 
+
   a:hover {
     text-decoration: none;
   }
@@ -46,7 +32,21 @@ if (isset($_POST['url'])) {
   input {
     font-size: 24px;
   }
-  </style> 
+  </style>
+  <script type="text/javascript">
+  function getQuerystring(key, default_)
+  {
+    if (default_ == null) default_="";
+    key = key.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regex = new RegExp("[\\?&]"+key+"=([^&#]*)");
+    var qs = regex.exec(window.location.href);
+    if (qs == null) {
+      return default_;
+    } else {
+      return qs[1];
+    }
+  }
+  </script>
 </head>
 <body>
 <h1>QRコード作成ツール</h1>
@@ -55,16 +55,20 @@ if (isset($_POST['url'])) {
 フォームにURLを入れて「変換」でURLをqrコードに変換できます。
 </p>
 
-<form method="POST">
+<form method="GET">
 <input type="text" name="url" size="30"/>
 <input type="submit" value="変換">
 </form>
 
-<?php
-if ($img_tag) {
-    echo $img_tag;
-}
-?>
+<script>
+  var url = getQuerystring('url', false);
+  if (url) {
+    url = encodeURI(url);
+    var img_tag = '<img src="http://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=' + url + '" />';
+    document.write(img_tag);
+
+  }
+</script>
 </div>
 
 <div class="textBody">
